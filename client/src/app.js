@@ -1,5 +1,4 @@
 const angular = require('angular');
-
 const app = angular.module('app', []);
 
 app.component('app', {
@@ -9,3 +8,4 @@ app.component('app', {
 
   }]
 })
+require('./board/board');
