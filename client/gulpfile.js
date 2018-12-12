@@ -24,6 +24,13 @@ var jsTask = () => {
     )
 }
 
+var cssTask = () => {
+    return gulp.src('src/style.css')
+                .pipe(
+                    gulp.dest('./dist/')
+                )
+}
+
 var templatesTask = () => {
     return (
         gulp
@@ -37,21 +44,24 @@ var templatesTask = () => {
 var serverTask = (done) => {
     connect.server({
         root: './dist',
-        livereload: true
+        livereload: true,
+        fallback: './dist/index.html'
     });
     done();
 }
 
 var watchHtml = () => gulp.watch('src/**/*.html', { ignoreInitial: false }, templatesTask);
 var watchJs = () => gulp.watch('src/**/*.js', { ignoreInitial: false }, jsTask);
+var watchCss = () => gulp.watch('src/**/*.css', { ignoreInitial: false }, cssTask);
 var watch = gulp.series(
     cleanTask,
-    gulp.parallel(watchHtml, watchJs)
+    gulp.parallel(watchHtml, watchJs, watchCss)
 );
 
+exports.css = cssTask;
 exports.build = gulp.series(
     cleanTask,
-    gulp.parallel(jsTask , templatesTask)
+    gulp.parallel(jsTask , cssTask, templatesTask)
 );
 exports.watch = watch
 exports.clean = cleanTask
@@ -60,3 +70,4 @@ exports.default =  gulp.parallel(
     serverTask,
     watch
 )
+
